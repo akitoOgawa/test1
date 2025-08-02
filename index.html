@@ -3,31 +3,42 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>縦動画再生</title>
+  <title>縦動画表示</title>
   <style>
     html, body {
       margin: 0;
       padding: 0;
-      background: black;
-      height: 100vh;
+      background-color: black;
+      width: 100%;
+      height: 100%;
+      overflow: hidden;
+    }
+
+    .video-container {
+      position: fixed;
+      top: 0;
+      left: 0;
       width: 100vw;
+      height: 100vh;
       display: flex;
       justify-content: center;
       align-items: center;
-    }
-    video {
-      width: 100vw;
-      height: 100vh;
-      object-fit: contain;
       background-color: black;
+    }
+
+    video {
+      max-height: 100%;
+      max-width: 100%;
+      object-fit: contain;
     }
   </style>
 </head>
 <body>
-  <video id="video" playsinline controls>
-    <source src="video.mp4" type="video/mp4">
-    対応していないブラウザです。
-  </video>
+  <div class="video-container">
+    <video id="video" playsinline controls>
+      <source src="your-video.mp4" type="video/mp4">
+      お使いのブラウザは video タグをサポートしていません。
+    </video>
+  </div>
 </body>
 </html>
-
