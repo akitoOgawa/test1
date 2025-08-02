@@ -2,47 +2,60 @@
 <html>
 <head>
   <meta charset="UTF-8">
-  <title>タップで動画再生</title>
+  <title>全画面動画再生</title>
   <style>
-    body {
+    html, body {
       margin: 0;
+      padding: 0;
+      height: 100%;
+      background-color: black;
       display: flex;
       justify-content: center;
       align-items: center;
-      height: 100vh;
-      background-color: black;
       color: white;
       font-family: sans-serif;
-      flex-direction: column;
     }
-    #tapMessage {
-      margin-bottom: 20px;
+    #message {
       font-size: 1.2rem;
+      text-align: center;
     }
     video {
-      max-width: 100%;
-      height: auto;
       display: none;
     }
   </style>
 </head>
 <body>
-  <div id="tapMessage">画面をタップして動画を再生してください</div>
-  <video id="video" controls>
-    <source src="video.mp4" type="video/mp4">
-    お使いのブラウザは動画再生に対応していません。
+  <div id="message">タップすると動画が全画面で再生されます</div>
+
+  <video id="video" controls playsinline>
+    <source src="your-video.mp4" type="video/mp4">
+    お使いのブラウザは動画に対応していません。
   </video>
 
   <script>
     const video = document.getElementById('video');
-    const message = document.getElementById('tapMessage');
+    const message = document.getElementById('message');
 
-    document.body.addEventListener('click', () => {
+    document.body.addEventListener('click', async () => {
       message.style.display = 'none';
       video.style.display = 'block';
-      video.play();
-    }, { once: true }); // 一度だけ実行
+
+      // 動画を再生
+      try {
+        await video.play();
+      } catch (err) {
+        console.error("再生エラー:", err);
+      }
+
+      // 全画面にする
+      if (video.requestFullscreen) {
+        video.requestFullscreen();
+      } else if (video.webkitRequestFullscreen) {
+        video.webkitRequestFullscreen(); // iOS Safari
+      } else if (video.msRequestFullscreen) {
+        video.msRequestFullscreen();
+      }
+    }, { once: true }); // 1回だけ実行
   </script>
 </body>
 </html>
-
