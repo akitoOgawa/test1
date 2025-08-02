@@ -2,7 +2,7 @@
 <html lang="ja">
 <head>
   <meta charset="UTF-8">
-  <title>動画表示（カットなし）</title>
+  <title>縦動画再生</title>
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <style>
     html, body {
@@ -12,6 +12,18 @@
       width: 100vw;
       height: 100vh;
       overflow: hidden;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+
+    video {
+      width: auto;
+      height: auto;
+      max-width: 100vw;
+      max-height: 100vh;
+      background-color: black;
+      object-fit: contain;
     }
 
     #message {
@@ -20,24 +32,16 @@
       left: 50%;
       transform: translate(-50%, -50%);
       color: white;
-      font-size: 1.2rem;
       text-align: center;
-      z-index: 2;
-    }
-
-    video {
-      width: 100vw;
-      height: 100vh;
-      object-fit: contain; /* ✅ カットなしで全体を表示 */
-      background-color: black;
-      display: none;
+      font-size: 1.2rem;
+      z-index: 10;
     }
   </style>
 </head>
 <body>
-  <div id="message">画面をタップして動画を再生<br>（横向き推奨）</div>
+  <div id="message">タップして再生</div>
 
-  <video id="video" controls playsinline>
+  <video id="video" playsinline controls style="display: none;">
     <source src="video.mp4" type="video/mp4">
     お使いのブラウザは動画に対応していません。
   </video>
@@ -46,21 +50,5 @@
     const video = document.getElementById('video');
     const message = document.getElementById('message');
 
-    document.body.addEventListener('click', async () => {
-      message.style.display = 'none';
-      video.style.display = 'block';
+    document.body.addEventListener('click', async () =>
 
-      try {
-        await video.play();
-
-        // フルスクリーン化（iPhone Safari 専用）
-        if (video.webkitEnterFullscreen) {
-          video.webkitEnterFullscreen();
-        }
-      } catch (err) {
-        console.error('再生エラー:', err);
-      }
-    }, { once: true });
-  </script>
-</body>
-</html>
