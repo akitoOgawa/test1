@@ -1,31 +1,41 @@
 <!DOCTYPE html>
-<html>
+<html lang="ja">
 <head>
   <meta charset="UTF-8">
-  <title>全画面動画再生</title>
+  <title>動画表示（カットなし）</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
   <style>
     html, body {
       margin: 0;
       padding: 0;
-      height: 100%;
       background-color: black;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      color: white;
-      font-family: sans-serif;
+      width: 100vw;
+      height: 100vh;
+      overflow: hidden;
     }
+
     #message {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      color: white;
       font-size: 1.2rem;
       text-align: center;
+      z-index: 2;
     }
+
     video {
+      width: 100vw;
+      height: 100vh;
+      object-fit: contain; /* ✅ カットなしで全体を表示 */
+      background-color: black;
       display: none;
     }
   </style>
 </head>
 <body>
-  <div id="message">タップすると動画が全画面で再生されます</div>
+  <div id="message">画面をタップして動画を再生<br>（横向き推奨）</div>
 
   <video id="video" controls playsinline>
     <source src="video.mp4" type="video/mp4">
@@ -40,22 +50,17 @@
       message.style.display = 'none';
       video.style.display = 'block';
 
-      // 動画を再生
       try {
         await video.play();
-      } catch (err) {
-        console.error("再生エラー:", err);
-      }
 
-      // 全画面にする
-      if (video.requestFullscreen) {
-        video.requestFullscreen();
-      } else if (video.webkitRequestFullscreen) {
-        video.webkitRequestFullscreen(); // iOS Safari
-      } else if (video.msRequestFullscreen) {
-        video.msRequestFullscreen();
+        // フルスクリーン化（iPhone Safari 専用）
+        if (video.webkitEnterFullscreen) {
+          video.webkitEnterFullscreen();
+        }
+      } catch (err) {
+        console.error('再生エラー:', err);
       }
-    }, { once: true }); // 1回だけ実行
+    }, { once: true });
   </script>
 </body>
 </html>
